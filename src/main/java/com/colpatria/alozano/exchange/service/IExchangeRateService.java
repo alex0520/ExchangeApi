@@ -1,5 +1,8 @@
 package com.colpatria.alozano.exchange.service;
 
+import com.colpatria.alozano.exchange.model.dto.ExchangeRequestDTO;
+import com.colpatria.alozano.exchange.model.dto.ExchangeResponseDTO;
+
 public interface IExchangeRateService {
-    Double changeCurrency(Integer fromCurrency, Integer toCurrency, Double value);
+    ExchangeResponseDTO exchangeCurrency(ExchangeRequestDTO exchangeRequestDTO) throws Exception;
 }
