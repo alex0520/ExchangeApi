@@ -1,0 +1,59 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+    <changeSet author="alozano" id="20181218_create_tables">
+        <createTable tableName="currency">
+            <column autoIncrement="true" name="idCurrency" type="INT">
+                <constraints primaryKey="true" primaryKeyName="pk_currency"/>
+            </column>
+            <column name="name" type="VARCHAR(45)"/>
+            <column name="active" type="TINYINT"/>
+            <column name="create_date" type="DATETIME"/>
+        </createTable>
+        <createTable tableName="exchange_rate">
+            <column autoIncrement="true" name="idExchange_rate" type="INT">
+                <constraints primaryKey="true" primaryKeyName="pk_exchange_rate"/>
+            </column>
+            <column name="from_currency_id" type="INT"/>
+            <column name="to_currency_id" type="INT"/>
+            <column name="exchange_rate" type="DOUBLE"/>
+            <column name="active" type="TINYINT"/>
+            <column name="create_date" type="DATETIME"/>
+        </createTable>
+        <addForeignKeyConstraint baseColumnNames="from_currency_id"
+                                 baseTableName="exchange_rate"
+                                 constraintName="fk_exchange_rate_currency_from"
+                                 onDelete="CASCADE"
+                                 onUpdate="RESTRICT"
+                                 referencedColumnNames="idCurrency"
+                                 referencedTableName="currency"/>
+        <addForeignKeyConstraint baseColumnNames="to_currency_id"
+                                 baseTableName="exchange_rate"
+                                 constraintName="fk_exchange_rate_currency_to"
+                                 onDelete="CASCADE"
+                                 onUpdate="RESTRICT"
+                                 referencedColumnNames="idCurrency"
+                                 referencedTableName="currency"/>
+    </changeSet>
+    <changeSet author="alozano" id="20181218_populate_tables">
+        <insert tableName="currency">
+            <column name="name" value="USD"/>
+            <column name="active" valueBoolean="true"/>
+            <column name="create_date" valueDate="now()"/>
+        </insert>
+        <insert tableName="currency">
+            <column name="name" value="EUR"/>
+            <column name="active" valueBoolean="true"/>
+            <column name="create_date" valueDate="now()"/>
+        </insert>
+        <insert tableName="exchange_rate">
+            <column name="from_currency_id" valueNumeric="1"/>
+            <column name="to_currency_id" valueNumeric="2"/>
+            <column name="exchange_rate" valueNumeric="0.88"/>
+            <column name="active" valueBoolean="true"/>
+            <column name="create_date" valueDate="now()"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>
