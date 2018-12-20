@@ -5,12 +5,9 @@ import com.colpatria.alozano.exchange.model.dto.ExchangeResponseDTO;
 import com.colpatria.alozano.exchange.service.IExchangeRateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 
 @RestController
 public class ExchangeController {
@@ -19,8 +16,14 @@ public class ExchangeController {
     IExchangeRateService exchangeRateService;
 
     @PostMapping(path = "/api/exchange")
-    public ResponseEntity<ExchangeResponseDTO> register(@Valid @RequestBody ExchangeRequestDTO exchangeRequestDTO) throws Exception {
+    public ResponseEntity<ExchangeResponseDTO> register(@Valid @RequestBody ExchangeRequestDTO exchangeRequestDTO) {
 
         return ResponseEntity.ok(exchangeRateService.exchangeCurrency(exchangeRequestDTO));
+    }
+
+    @GetMapping(value = "/api/exchange")
+    public ResponseEntity<ExchangeResponseDTO> getBarBySimplePathWithRequestParam(
+            @RequestParam("fromCurrency") Integer fromCurrency, @RequestParam("toCurrency") Integer toCurrency) {
+        return ResponseEntity.ok(exchangeRateService.getExchangeRate(fromCurrency, toCurrency));
     }
 }
